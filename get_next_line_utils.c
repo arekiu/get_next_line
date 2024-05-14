@@ -6,7 +6,7 @@
 /*   By: aschmidt <aschmidt@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:04:35 by aschmidt          #+#    #+#             */
-/*   Updated: 2024/05/13 14:12:38 by aschmidt         ###   ########.fr       */
+/*   Updated: 2024/05/14 12:46:00 by aschmidt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 char	*ft_strdup(const char *s1)
 {
-	int	i;
-	size_t	size;
-	char	*buffer;
+	int			i;
+	size_t		size;
+	char		*buffer;
 
 	size = ft_strlen(s1);
 	buffer = malloc(sizeof(char) * (size + 1));
