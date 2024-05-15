@@ -6,16 +6,16 @@
 /*   By: aschmidt <aschmidt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 12:11:59 by aschmidt          #+#    #+#             */
-/*   Updated: 2024/05/14 16:22:02 by aschmidt         ###   ########.fr       */
+/*   Updated: 2024/05/15 13:19:36 by aschmidt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*_set_line(int fd, char *buff, char *temp_line);
+static char	*_set_line(int fd, char *buff, char *left_over);
 static char	*_clean_line(char *temp_line);
-static char	*_set_left_over(char *temp_line);
-
+static char	*_set_left_over(char *left_over);
+/*
 int	main(void)
 {
 	int	fd;
@@ -27,13 +27,13 @@ int	main(void)
 
 	close(fd);
 	return (0);
-}
+}*/
 
 char	*get_next_line(int fd)
 {
 	char		*buff;
 	char		*line;
-	static char	*temp_line;
+	static char	*left_over;
 
 	buff = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buff || fd < 0 || BUFFER_SIZE <= 0)
@@ -41,81 +41,93 @@ char	*get_next_line(int fd)
 		free(buff);
 		return (NULL);
 	}
-	temp_line = _set_line(fd, buff, temp_line);
-	if (!temp_line)
-	{
-		printf("Estoy aca");
-		free(buff);
-		temp_line = NULL;
-		return (NULL);
-	}
-	line = _clean_line(temp_line);
+	line = _set_line(fd, buff, left_over);
 	free(buff);
-	temp_line = _set_left_over(temp_line);
+	buff = NULL;
+	if (!line)
+		return (NULL);
+	left_over = ft_strdup(line);
+	line = _clean_line(line);
+	left_over = _set_left_over(left_over);
 	return (line);
 }
 
-static char	*_set_line(int fd, char *buff, char *temp_line)
+static char	*_set_line(int fd, char *buff, char *left_over)
 {
 	ssize_t	nr_bytes;
 	char	*temp;
 
 	nr_bytes = 1;
-	if (!temp_line)
-		temp_line = ft_strdup("");
 	while (nr_bytes > 0)
 	{
 		nr_bytes = read (fd, buff, BUFFER_SIZE);
 		if (nr_bytes < 0)
 		{
-			free(temp_line);
+			free(left_over);
 			return (NULL);
 		}
-		if (nr_bytes == 0 || ft_strchr(buff, '\n'))
+		if (nr_bytes == 0)
 			break ;
-		temp = ft_strjoin(temp_line, buff);
-		free (temp_line);
-		temp_line = temp;
+		buff[nr_bytes] = '\0';
+		if (!left_over)
+			left_over = ft_strdup("");
+		temp = left_over;
+		left_over = ft_strjoin(temp, buff);
+		free (temp);
+		temp = NULL;
+		if (ft_strchr(buff, '\n'))
+			break ;
 	}
-	if (nr_bytes < 0)
-	{
-		free(temp_line);
-		return (NULL);
-	}
-	return (temp_line);
+	return (left_over);
 }
 
 static char	*_clean_line(char *temp_line)
 {
 	int		i;
-	char	*clean_str;
+	char	*temp;
 
 	i = 0;
-	if(!temp_line)
+	if(!temp_line || temp_line[i] == '\0')
 		return (NULL);
 	while (temp_line[i] != '\0' && temp_line[i] != '\n')
 		i++;
 	if (temp_line[i] == '\n')
 		i++;
-	clean_str = ft_substr(temp_line, 0, i);
-	return (clean_str);
+	temp = temp_line;
+	temp_line = ft_substr(temp, 0, i);
+	free (temp);
+	temp = NULL;
+	return (temp_line);
 }
 
-static char	*_set_left_over(char *temp_line)
+static char	*_set_left_over(char *left_over)
 {
 	char	*temp;
 	int		i;
 
 	i = 0;
-	if (!temp_line)
-		return (NULL);
-	if (ft_strchr(temp_line, '\n') != 0)
+	if (!left_over || left_over[i] == '\0' || ft_strchr(left_over, '\n') == 0)
 	{
-		while (temp_line[i] != '\n')
-			i++;
-		temp = ft_substr(temp_line, (i + 1), ft_strlen(temp_line));
-		return (temp);
+		free (left_over);
+		left_over = NULL;
+		return (NULL);
 	}
-	free (temp_line);
-	return (NULL);
+	if (ft_strchr(left_over, '\n') != 0)
+	{
+		while (left_over[i] != '\n')
+			i++;
+		temp = left_over;
+		left_over = ft_substr(temp, (i + 1), ft_strlen(temp));
+		if (*left_over == 0 || !left_over)
+		{
+			free (left_over);
+			free(temp);
+			temp = NULL;
+			return (NULL);
+		}
+		free (temp);
+		temp = NULL;
+		return (left_over);
+	}
+	return (left_over);
 }
