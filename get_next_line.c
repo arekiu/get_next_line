@@ -6,7 +6,7 @@
 /*   By: aschmidt <aschmidt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 12:11:59 by aschmidt          #+#    #+#             */
-/*   Updated: 2024/05/16 10:09:51 by aschmidt         ###   ########.fr       */
+/*   Updated: 2024/05/16 10:29:00 by aschmidt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ static char	*_set_left_over(char *line, char *left_over);
 int	main(void)
 {
 	int	fd;
+	char	*line;
 
-	fd = open("read_error.txt", O_RDONLY);
-	printf("la linea: %s$\n", get_next_line(fd));
-	printf("la linea2: %s$", get_next_line(fd));
-	printf("la linea3: %s$\n", get_next_line(fd));
-	printf("la linea4: %s$", get_next_line(fd));
-	printf("la linea5: %s$", get_next_line(fd));
-	//printf("%s", get_next_line(fd));
+	fd = open("example.txt", O_RDONLY);
+	while ((line = get_next_line(fd)) != NULL)
+	{
+		printf("%s$\n", line);
+		free(line);
+	}
 
 	close(fd);
 	return (0);
