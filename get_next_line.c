@@ -6,7 +6,7 @@
 /*   By: aschmidt <aschmidt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 12:11:59 by aschmidt          #+#    #+#             */
-/*   Updated: 2024/05/16 09:35:55 by aschmidt         ###   ########.fr       */
+/*   Updated: 2024/05/16 10:09:51 by aschmidt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,17 @@ int	main(void)
 {
 	int	fd;
 
-	fd = open("example.txt", O_RDONLY);
+	fd = open("read_error.txt", O_RDONLY);
 	printf("la linea: %s$\n", get_next_line(fd));
 	printf("la linea2: %s$", get_next_line(fd));
+	printf("la linea3: %s$\n", get_next_line(fd));
+	printf("la linea4: %s$", get_next_line(fd));
+	printf("la linea5: %s$", get_next_line(fd));
 	//printf("%s", get_next_line(fd));
 
 	close(fd);
 	return (0);
 }*/
-
-//SOLUTION= cutting the end before? usar set_left_over para guardar y en caso de que contenga '\0' return NULL;
 
 char	*get_next_line(int fd)
 {
@@ -47,7 +48,11 @@ char	*get_next_line(int fd)
 	free (buff);
 	buff = NULL;
 	if (!line)
+	{
+		free (left_over);
+		left_over = NULL;
 		return (NULL);
+	}
 	left_over = _set_left_over(line, left_over);
 	line = _clean_line(line);
 	return (line);
@@ -74,7 +79,7 @@ static char	*_set_line(int fd, char *buff, char *left_over)
 		free (temp);
 		temp = NULL;
 		if (ft_strchr(buff, '\n'))
-			break;
+			break ;
 	}
 	return (left_over);
 }
@@ -107,7 +112,7 @@ static char	*_clean_line(char *temp_line)
 	char	*temp;
 
 	i = 0;
-	if(temp_line[i] == '\0')
+	if (temp_line[i] == '\0')
 		return (NULL);
 	while (temp_line[i] != '\0' && temp_line[i] != '\n')
 		i++;
