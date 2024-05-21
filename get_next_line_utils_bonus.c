@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschmidt <aschmidt@student.42berlin.d      +#+  +:+       +#+        */
+/*   By: aschmidt <aschmidt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/13 12:04:35 by aschmidt          #+#    #+#             */
-/*   Updated: 2024/05/14 12:46:00 by aschmidt         ###   ########.fr       */
+/*   Created: 2024/05/21 10:13:37 by aschmidt          #+#    #+#             */
+/*   Updated: 2024/05/21 11:02:03 by aschmidt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
-char	*ft_strdup(const char *s1)
+char	*ft_strdup_bonus(const char *s1)
 {
 	int			i;
 	size_t		size;
 	char		*buffer;
 
-	size = ft_strlen(s1);
+	size = ft_strlen_b(s1);
 	buffer = malloc(sizeof(char) * (size + 1));
 	if (buffer == NULL)
 		return (NULL);
@@ -32,7 +32,7 @@ char	*ft_strdup(const char *s1)
 	return (buffer);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin_bonus(char const *s1, char const *s2)
 {
 	char	*buffer;
 	int		i;
@@ -40,7 +40,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 	i = 0;
 	j = 0;
-	buffer = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	buffer = malloc(sizeof(char) * (ft_strlen_b(s1) + ft_strlen_b(s2) + 1));
 	if (buffer == NULL)
 		return (NULL);
 	while (s1[j] != '\0')
@@ -60,7 +60,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (buffer);
 }
 
-char	*ft_strchr(const char *str, int c)
+char	*ft_strchr_bonus(const char *str, int c)
 {
 	int				i;
 	unsigned char	ce;
@@ -78,7 +78,7 @@ char	*ft_strchr(const char *str, int c)
 	return (0);
 }
 
-size_t	ft_strlen(const char *str)
+size_t	ft_strlen_b(const char *str)
 {
 	size_t	i;
 
@@ -90,18 +90,18 @@ size_t	ft_strlen(const char *str)
 	return (i);
 }
 
-char	*ft_substr(char const *str, unsigned int start, size_t len)
+char	*ft_substr_bonus(char const *str, unsigned int start, size_t len)
 {
 	char	*sub;
 	size_t	i;
 
 	i = 0;
-	if (start > ft_strlen(str))
+	if (start > ft_strlen_b(str))
 	{
 		len = 0;
 	}
-	if (len != 0 && len > ft_strlen(str + start))
-		len = ft_strlen(str + start);
+	if (len != 0 && len > ft_strlen_b(str + start))
+		len = ft_strlen_b(str + start);
 	sub = malloc(sizeof(char) * (len + 1));
 	if (sub == NULL)
 		return (NULL);
